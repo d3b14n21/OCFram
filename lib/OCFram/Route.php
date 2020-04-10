@@ -1,4 +1,5 @@
 <?php
+
 namespace OCFram;
 
 class Route
@@ -17,6 +18,32 @@ class Route
         $this->setVarsNames($varsNames);
     }
 
+    public function setUrl($url)
+    {
+        if (is_string($url)) {
+            $this->url = $url;
+        }
+    }
+
+    public function setModule($module)
+    {
+        if (is_string($module)) {
+            $this->module = $module;
+        }
+    }
+
+    public function setAction($action)
+    {
+        if (is_string($action)) {
+            $this->action = $action;
+        }
+    }
+
+    public function setVarsNames(array $varsNames)
+    {
+        $this->varsNames = $varsNames;
+    }
+
     public function hasVars()
     {
         return !empty($this->varsNames);
@@ -24,43 +51,11 @@ class Route
 
     public function match($url)
     {
-        if (preg_match('`^'.$this->url.'$`', $url, $matches))
-        {
+        if (preg_match('`^' . $this->url . '$`', $url, $matches)) {
             return $matches;
-        }
-        else
-        {
+        } else {
             return false;
         }
-    }
-
-    public function setAction($action)
-    {
-        if (is_string($action))
-        {
-            $this->action = $action;
-        }
-    }
-
-    public function setModule($module)
-    {
-        if (is_string($module))
-        {
-            $this->module = $module;
-        }
-    }
-
-    public function setUrl($url)
-    {
-        if (is_string($url))
-        {
-            $this->url = $url;
-        }
-    }
-
-    public function setVarsNames(array $varsNames)
-    {
-        $this->varsNames = $varsNames;
     }
 
     public function setVars(array $vars)
