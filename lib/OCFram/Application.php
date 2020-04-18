@@ -1,5 +1,4 @@
 <?php
-
 namespace OCFram;
 
 abstract class Application
@@ -21,16 +20,18 @@ abstract class Application
         $router = new Router;
 
         $xml = new \DOMDocument;
-        $xml->load(__DIR__ . '/../../App/' . $this->name . '/Config/routes.xml');
+        $xml->load(__DIR__.'/../../App/'.$this->name.'/Config/routes.xml');
 
         $routes = $xml->getElementsByTagName('route');
 
         // On parcourt les routes du fichier XML.
-        foreach ($routes as $route) {
+        foreach ($routes as $route)
+        {
             $vars = [];
 
             // On regarde si des variables sont présentes dans l'URL.
-            if ($route->hasAttribute('vars')) {
+            if ($route->hasAttribute('vars'))
+            {
                 $vars = explode(',', $route->getAttribute('vars'));
             }
 
@@ -38,11 +39,15 @@ abstract class Application
             $router->addRoute(new Route($route->getAttribute('url'), $route->getAttribute('module'), $route->getAttribute('action'), $vars));
         }
 
-        try {
+        try
+        {
             // On récupère la route correspondante à l'URL.
             $matchedRoute = $router->getRoute($this->httpRequest->requestURI());
-        } catch (\RuntimeException $e) {
-            if ($e->getCode() == Router::NO_ROUTE) {
+        }
+        catch (\RuntimeException $e)
+        {
+            if ($e->getCode() == Router::NO_ROUTE)
+            {
                 // Si aucune route ne correspond, c'est que la page demandée n'existe pas.
                 $this->httpResponse->redirect404();
             }
@@ -52,7 +57,7 @@ abstract class Application
         $_GET = array_merge($_GET, $matchedRoute->vars());
 
         // On instancie le contrôleur.
-        $controllerClass = 'App\\' . $this->name . '\\Modules\\' . $matchedRoute->module() . '\\' . $matchedRoute->module() . 'Controller';
+        $controllerClass = 'App\\'.$this->name.'\\Modules\\'.$matchedRoute->module().'\\'.$matchedRoute->module().'Controller';
         return new $controllerClass($this, $matchedRoute->module(), $matchedRoute->action());
     }
 
